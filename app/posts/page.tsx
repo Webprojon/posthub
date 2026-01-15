@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "@/shared/lib/posts-api";
 import { useDeletePost } from "@/shared/lib/post-mutations";
@@ -9,6 +10,7 @@ import { useAuth } from "@/shared/lib/auth-context";
 import { RiDeleteBin5Line, RiEdit2Line } from "react-icons/ri";
 
 export default function PostsPage() {
+  const router = useRouter();
   const { isAuthenticated } = useAuth();
   const {
     data: posts,
@@ -69,14 +71,14 @@ export default function PostsPage() {
                       <button
                         onClick={() => handleDelete(post.id)}
                         disabled={deletePost.isPending}
-                        className="p-2 cursor-pointer border border-white/50 rounded"
+                        className="p-2 cursor-pointer border border-white/50 rounded hover:border-red-500 hover:text-red-500 transition"
                       >
                         <RiDeleteBin5Line />
                       </button>
                       <button
-                        // onClick={() => handleDelete(post.id)}
-                        // disabled={deletePost.isPending}
-                        className="p-2 cursor-pointer border border-white/50 rounded"
+                        onClick={() => router.push(`/edit/${post.id}`)}
+                        disabled={deletePost.isPending}
+                        className="p-2 cursor-pointer border border-white/50 rounded hover:border-blue-500 hover:text-blue-500 transition"
                       >
                         <RiEdit2Line />
                       </button>
