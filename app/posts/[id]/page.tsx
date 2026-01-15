@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPost } from "@/shared/lib/posts-api";
 import QueryState from "@/shared/ui/query-state";
 import { use } from "react";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 type PostDetailPageProps = {
   params: Promise<{
@@ -37,20 +38,21 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
         errorLabel="Failed to load post"
       />
 
-      { post && (
+      {post && (
         <>
-          <Link href="/posts" className="text-sm text-blue-700 hover:underline">
-            ← Back to posts
+          <Link href="/posts" className="flex items-center gap-2">
+            <MdKeyboardArrowLeft className="size-6" />
+            Back to posts
           </Link>
 
-          <header className="space-y-1">
+          <header className="space-y-2 mt-6">
             <h1 className="text-2xl font-semibold">{post.title}</h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-300">
               by {post.author} • {new Date(post.createdAt).toLocaleString()}
             </p>
           </header>
 
-          <p className="text-gray-800 leading-relaxed">{post.body}</p>
+          <p className="text-gray-400 leading-relaxed">{post.body}</p>
         </>
       )}
     </article>

@@ -2,13 +2,14 @@ import { errorResponse, successResponse } from "@/shared/lib/api-response";
 import { findPostById, updatePost, deletePost } from "@/shared/lib/posts";
 
 type RouteContext = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export async function GET(_request: Request, { params }: RouteContext) {
-  const postId = Number(params.id);
+  const { id } = await params;
+  const postId = Number(id);
   const post = findPostById(postId);
 
   if (!post) {
@@ -20,7 +21,8 @@ export async function GET(_request: Request, { params }: RouteContext) {
 
 export async function PATCH(request: Request, { params }: RouteContext) {
   try {
-    const postId = Number(params.id);
+    const { id } = await params;
+    const postId = Number(id);
     const post = findPostById(postId);
 
     if (!post) {
@@ -57,7 +59,8 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
 export async function DELETE(_request: Request, { params }: RouteContext) {
   try {
-    const postId = Number(params.id);
+    const { id } = await params;
+    const postId = Number(id);
     const post = findPostById(postId);
 
     if (!post) {
