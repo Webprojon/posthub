@@ -3,7 +3,6 @@
 import { useAuth } from "@/shared/lib/auth-context";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { is } from "./../.next/dev/static/chunks/node_modules_next_dist_shared_lib_8bac8163._";
 
 const PUBLIC_PATHS = ["/login"];
 
