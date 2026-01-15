@@ -6,7 +6,7 @@ export type Post = {
   createdAt: string;
 };
 
-export const POSTS: Post[] = [
+export let POSTS: Post[] = [
   {
     id: 1,
     title: "Understanding Next.js Route Handlers",
@@ -32,5 +32,36 @@ export const POSTS: Post[] = [
 
 export function findPostById(id: number) {
   return POSTS.find((post) => post.id === id);
+}
+
+export function createPost(title: string, body: string, author: string): Post {
+  const newPost: Post = {
+    id: Math.max(...POSTS.map((p) => p.id), 0) + 1,
+    title,
+    body,
+    author,
+    createdAt: new Date().toISOString(),
+  };
+  POSTS.push(newPost);
+  return newPost;
+}
+
+export function updatePost(
+  id: number,
+  title: string,
+  body: string
+): Post | null {
+  const post = findPostById(id);
+  if (!post) return null;
+  post.title = title;
+  post.body = body;
+  return post;
+}
+
+export function deletePost(id: number): boolean {
+  const index = POSTS.findIndex((post) => post.id === id);
+  if (index === -1) return false;
+  POSTS.splice(index, 1);
+  return true;
 }
 
