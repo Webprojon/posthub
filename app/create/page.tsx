@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useAuth } from "@/shared/lib/auth-context";
 import { useCreatePost } from "@/shared/lib/post-mutations";
 import Button from "@/shared/ui/button";
@@ -13,19 +14,23 @@ type FormData = {
   author: string;
 };
 
-type FormErrors = Partial<FormData>;
-
 export default function CreatePage() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const createPost = useCreatePost();
-  const [formData, setFormData] = useState<FormData>({
-    title: "",
-    body: "",
-    author: user?.name || "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+    reset,
+  } = useForm<FormData>({
+    defaultValues: {
+      title: "",
+      body: "",
+      author: user?.name || "",
+    },
   });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -33,61 +38,15 @@ export default function CreatePage() {
     }
   }, [isAuthenticated, router]);
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.title.trim()) {
-      newErrors.title = "Title is required";
-    } else if (formData.title.trim().length < 3) {
-      newErrors.title = "Title must be at least 3 characters";
-    }
-
-    if (!formData.body.trim()) {
-      newErrors.body = "Body is required";
-    } else if (formData.body.trim().length < 10) {
-      newErrors.body = "Body must be at least 10 characters";
-    }
-
-    if (!formData.author.trim()) {
-      newErrors.author = "Author name is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
+  const onSubmit = async (data: FormData) => {
     try {
-      await createPost.mutateAsync(formData);
+      await createPost.mutateAsync(data);
+      reset();
       router.push("/posts");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to create post";
-      setErrors({ title: message });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    if (errors[name as keyof FormData]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
+      const message =
+        error instanceof Error ? error.message : "Failed to create post";
+      setError("title", { message });
     }
   };
 
@@ -96,87 +55,66 @@ export default function CreatePage() {
   }
 
   return (
-    <div className="mt-4 max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Create a New Post</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="mt-4">
+      <h2 className="text-xl font-bold">Create a New Post</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium mb-1">
-            Title
-          </label>
           <Input
             id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
             placeholder="Enter post title"
             disabled={isSubmitting}
-            aria-invalid={!!errors.title}
-            aria-describedby={errors.title ? "title-error" : undefined}
+            error={!!errors.title}
+            {...register("title", {
+              required: "Title is required",
+              minLength: {
+                value: 3,
+                message: "Title must be at least 3 characters",
+              },
+            })}
           />
           {errors.title && (
             <p id="title-error" className="text-red-500 text-sm mt-1">
-              {errors.title}
+              {errors.title.message}
             </p>
           )}
         </div>
 
         <div>
-          <label htmlFor="body" className="block text-sm font-medium mb-1">
-            Body
-          </label>
           <textarea
-            id="body"
-            name="body"
-            value={formData.body}
-            onChange={handleInputChange}
-            placeholder="Enter post content"
-            disabled={isSubmitting}
             rows={6}
-            className="w-full px-3 py-2 border border-gray-500 rounded-md bg-transparent text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-            aria-invalid={!!errors.body}
-            aria-describedby={errors.body ? "body-error" : undefined}
+            id="body"
+            disabled={isSubmitting}
+            placeholder="Enter post content"
+            className={`w-full px-3 py-2 border rounded-md bg-transparent text-white/50 placeholder-white/50 outline-none ${
+              errors.body ? "border-red-500" : "border-white/50"
+            }`}
+            {...register("body", {
+              required: "Body is required",
+              minLength: {
+                value: 10,
+                message: "Body must be at least 10 characters",
+              },
+            })}
           />
           {errors.body && (
             <p id="body-error" className="text-red-500 text-sm mt-1">
-              {errors.body}
+              {errors.body.message}
             </p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="author" className="block text-sm font-medium mb-1">
-            Author
-          </label>
-          <Input
-            id="author"
-            name="author"
-            value={formData.author}
-            onChange={handleInputChange}
-            placeholder="Your name"
-            disabled={isSubmitting}
-            aria-invalid={!!errors.author}
-            aria-describedby={errors.author ? "author-error" : undefined}
-          />
-          {errors.author && (
-            <p id="author-error" className="text-red-500 text-sm mt-1">
-              {errors.author}
-            </p>
-          )}
-        </div>
-
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Creating..." : "Create Post"}
-          </Button>
+        <div className="flex justify-end gap-4">
           <button
             type="button"
             onClick={() => router.back()}
             disabled={isSubmitting}
-            className="px-4 py-2 border border-gray-500 rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50"
+            className="px-4 py-2 cursor-pointer text-white/50 border border-white/50 rounded-md disabled:opacity-50"
           >
             Cancel
           </button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Creating..." : "Create Post"}
+          </Button>
         </div>
 
         {createPost.error && (
@@ -190,4 +128,3 @@ export default function CreatePage() {
     </div>
   );
 }
-

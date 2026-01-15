@@ -7,11 +7,7 @@ import { useAuth } from "@/shared/lib/auth-context";
 const LINKS = [
   { link: "Home", href: "/" },
   { link: "Posts", href: "/posts" },
-];
-
-const AUTH_LINKS = [
   { link: "Create", href: "/create" },
-  { link: "Settings", href: "/settings" },
 ];
 
 export default function Header() {
@@ -35,7 +31,7 @@ export default function Header() {
                   href={href}
                   className={
                     isActive
-                      ? "text-red-600"
+                      ? "text-blue-600"
                       : "hover:text-slate-300 transition-all"
                   }
                 >
@@ -45,40 +41,16 @@ export default function Header() {
             );
           })}
 
-          {isAuthenticated && AUTH_LINKS.map(({ link, href }) => {
-            const isActive = pathname === href;
-
-            return (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={
-                    isActive
-                      ? "text-red-600"
-                      : "hover:text-slate-300 transition-all"
-                  }
-                >
-                  {link}
-                </Link>
-              </li>
-            );
-          })}
-
-          <li>
+          {isAuthenticated && (
             <Link
-              href="/settings"
-              className={
-                pathname === "/settings"
-                  ? "text-red-600"
-                  : "hover:text-slate-300 transition-all"
-              }
+              href="/profile"
+              className="capitalize border border-white/50 rounded-full text-sm overflow-hidden w-8 h-8 flex items-center justify-center"
             >
-              {isAuthenticated ? `${user?.name}` : "Login"}
+              {user?.name.slice(0, 1)}
             </Link>
-          </li>
+          )}
         </ul>
       </nav>
     </header>
   );
 }
-

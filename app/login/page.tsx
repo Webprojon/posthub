@@ -2,17 +2,27 @@
 
 import { useAuth } from "@/shared/lib/auth-context";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import Button from "@/shared/ui/button";
 import Input from "@/shared/ui/input";
+
+type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 export default function LoginPage() {
   const { isAuthenticated, login, isLoading } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<LoginFormData>({
+    defaultValues: { email: "", password: "" },
+  });
 
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
@@ -20,20 +30,14 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, isLoading, router]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(email, password);
-      setEmail("");
-      setPassword("");
+      await login(data.email, data.password);
       router.push("/");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
-    } finally {
-      setIsSubmitting(false);
+      setError("root", {
+        message: err instanceof Error ? err.message : "Login failed",
+      });
     }
   };
 
@@ -53,13 +57,13 @@ export default function LoginPage() {
           Sign in to your account
         </p>
 
-        {error && (
+        {errors.root && (
           <div className="mb-4 p-3 bg-red-900 border border-red-700 text-red-100 rounded-md text-sm">
-            {error}
+            {errors.root.message}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email Address
@@ -67,12 +71,21 @@ export default function LoginPage() {
             <Input
               id="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              required
               disabled={isSubmitting}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
             />
+            {errors.email && (
+              <p className="text-sm text-red-400 mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -85,12 +98,21 @@ export default function LoginPage() {
             <Input
               id="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              required
               disabled={isSubmitting}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 3,
+                  message: "Password must be at least 3 characters",
+                },
+              })}
             />
+            {errors.password && (
+              <p className="text-sm text-red-400 mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>

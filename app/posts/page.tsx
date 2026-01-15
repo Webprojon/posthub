@@ -47,7 +47,7 @@ export default function PostsPage() {
             {posts.map((post) => (
               <li
                 key={post.id}
-                className="rounded-md border border-gray-500 p-4"
+                className="rounded-md border border-white/50 p-4"
               >
                 <div className="flex justify-between items-start gap-4">
                   <div className="flex-1">
@@ -69,14 +69,14 @@ export default function PostsPage() {
                       <button
                         onClick={() => handleDelete(post.id)}
                         disabled={deletePost.isPending}
-                        className="p-2 cursor-pointer border border-gray-500 rounded"
+                        className="p-2 cursor-pointer border border-white/50 rounded"
                       >
                         <RiDeleteBin5Line />
                       </button>
                       <button
                         // onClick={() => handleDelete(post.id)}
                         // disabled={deletePost.isPending}
-                        className="p-2 cursor-pointer border border-gray-500 rounded"
+                        className="p-2 cursor-pointer border border-white/50 rounded"
                       >
                         <RiEdit2Line />
                       </button>
