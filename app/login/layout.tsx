@@ -10,9 +10,5 @@ export default function LoginLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="w-full h-screen m-0 p-0 bg-slate-900">
-      {children}
-    </div>
-  );
+  return <div className="w-full h-screen m-0 p-0 bg-slate-900">{children}</div>;
 }
