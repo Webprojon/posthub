@@ -6,7 +6,7 @@ export type Post = {
   createdAt: string;
 };
 
-export let POSTS: Post[] = [
+export const POSTS: Post[] = [
   {
     id: 1,
     title: "Understanding Next.js Route Handlers",
@@ -64,4 +64,3 @@ export function deletePost(id: number): boolean {
   POSTS.splice(index, 1);
   return true;
 }
-

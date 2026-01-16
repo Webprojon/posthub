@@ -13,14 +13,11 @@ export function useDeletePost() {
   return useMutation({
     mutationFn: (postId: number) => deletePostApi(postId),
     onMutate: async (postId: number) => {
-      // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["posts"] });
       await queryClient.cancelQueries({ queryKey: ["post", postId] });
 
-      // Snapshot the previous value
       const previousPosts = queryClient.getQueryData<Post[]>(["posts"]);
 
-      // Optimistically update the cache
       if (previousPosts) {
         queryClient.setQueryData(
           ["posts"],
@@ -31,7 +28,6 @@ export function useDeletePost() {
       return { previousPosts };
     },
     onError: (error, postId, context) => {
-      // Rollback on error
       if (context?.previousPosts) {
         queryClient.setQueryData(["posts"], context.previousPosts);
       }
@@ -72,15 +68,12 @@ export function useUpdatePost() {
       data: { title?: string; body?: string };
     }) => updatePostApi(postId, data),
     onMutate: async ({ postId, data }) => {
-      // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["posts"] });
       await queryClient.cancelQueries({ queryKey: ["post", postId] });
 
-      // Snapshot the previous values
       const previousPosts = queryClient.getQueryData<Post[]>(["posts"]);
       const previousPost = queryClient.getQueryData<Post>(["post", postId]);
 
-      // Optimistically update posts list
       if (previousPosts) {
         queryClient.setQueryData(
           ["posts"],
@@ -90,7 +83,6 @@ export function useUpdatePost() {
         );
       }
 
-      // Optimistically update post detail
       if (previousPost) {
         queryClient.setQueryData(["post", postId], {
           ...previousPost,
@@ -101,7 +93,6 @@ export function useUpdatePost() {
       return { previousPosts, previousPost };
     },
     onError: (error, { postId }, context) => {
-      // Rollback on error
       if (context?.previousPosts) {
         queryClient.setQueryData(["posts"], context.previousPosts);
       }

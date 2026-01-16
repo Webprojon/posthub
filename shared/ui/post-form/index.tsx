@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import Button from "@/shared/ui/button";
 import Input from "@/shared/ui/input";
+import { RiAlertLine } from "react-icons/ri";
 
 export type PostFormData = {
   title: string;
@@ -48,73 +49,122 @@ export default function PostForm({
     : "Update Post";
 
   return (
-    <div className="mt-4">
-      <h2 className="text-xl font-bold">{title}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
+    <div className="max-w-2xl mx-auto px-4 sm:px-0">
+      <h1 className="text-3xl sm:text-4xl font-bold mb-6">{title}</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
+          <label
+            htmlFor="title"
+            className="block text-sm font-semibold text-gray-300 mb-2"
+          >
+            Post Title
+          </label>
           <Input
             id="title"
-            placeholder="Enter post title"
+            placeholder="Enter an engaging title..."
             disabled={isSubmitting}
             error={!!errors.title}
+            aria-describedby={errors.title ? "title-error" : undefined}
             {...register("title", {
               required: "Title is required",
               minLength: {
                 value: 3,
                 message: "Title must be at least 3 characters",
               },
+              maxLength: {
+                value: 200,
+                message: "Title must not exceed 200 characters",
+              },
             })}
           />
           {errors.title && (
-            <p id="title-error" className="text-red-500 text-sm mt-1">
+            <p
+              id="title-error"
+              className="text-red-400 text-sm mt-2 flex items-center gap-1"
+            >
+              <RiAlertLine className="w-4 h-4" />
               {errors.title.message}
             </p>
           )}
         </div>
 
         <div>
+          <label
+            htmlFor="body"
+            className="block text-sm font-semibold text-gray-300 mb-2"
+          >
+            Content
+          </label>
           <textarea
-            rows={6}
+            rows={8}
             id="body"
             disabled={isSubmitting}
-            placeholder="Enter post content"
-            className={`w-full px-3 py-2 border rounded-md bg-transparent text-white/50 placeholder-white/50 outline-none ${
-              errors.body ? "border-red-500" : "border-white/50"
-            }`}
+            placeholder="Write your post content here... (minimum 10 characters)"
+            className={`w-full px-4 py-3 border rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-colors ${
+              errors.body
+                ? "border-red-500"
+                : "border-white/20 hover:border-white/30"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+            aria-describedby={errors.body ? "body-error" : undefined}
             {...register("body", {
-              required: "Body is required",
+              required: "Content is required",
               minLength: {
                 value: 10,
-                message: "Body must be at least 10 characters",
+                message: "Content must be at least 10 characters",
+              },
+              maxLength: {
+                value: 5000,
+                message: "Content must not exceed 5000 characters",
               },
             })}
           />
           {errors.body && (
-            <p id="body-error" className="text-red-500 text-sm mt-1">
+            <p
+              id="body-error"
+              className="text-red-400 text-sm mt-2 flex items-center gap-1"
+            >
+              <RiAlertLine className="w-4 h-4" />
               {errors.body.message}
             </p>
           )}
         </div>
 
-        <div className="flex justify-end gap-4">
+        {error && (
+          <div
+            className="p-4 rounded-lg bg-red-900/20 border border-red-800/50 flex gap-3"
+            role="alert"
+            aria-live="polite"
+          >
+            <RiAlertLine className="flex-shrink-0 w-5 h-5 text-red-500 mt-0.5" />
+            <div>
+              <p className="text-red-400 font-medium">Error</p>
+              <p className="text-red-400 text-sm">
+                {error instanceof Error
+                  ? error.message
+                  : "An error occurred. Please try again."}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-3 justify-end pt-4">
           <button
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="px-4 py-2 cursor-pointer text-white/50 border border-white/50 rounded-md disabled:opacity-50 hover:border-white/70 transition"
+            className="px-4 sm:px-6 py-2 sm:py-3 text-gray-300 border border-white/20 hover:border-white/40 hover:text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium order-2 sm:order-1"
+            aria-label="Cancel and go back"
           >
             Cancel
           </button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="order-1 sm:order-2"
+          >
             {submitLabel}
           </Button>
         </div>
-
-        {error && (
-          <div className="bg-red-900 border border-red-700 text-red-100 p-3 rounded-md">
-            {error instanceof Error ? error.message : "An error occurred"}
-          </div>
-        )}
       </form>
     </div>
   );
