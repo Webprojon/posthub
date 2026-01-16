@@ -4,9 +4,6 @@
   "installCommand": "npm ci",
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_API_URL": {
-      "value": "http://localhost:3000",
-      "type": "plain"
-    }
+    "NEXT_PUBLIC_API_URL": "http://localhost:3000"
   }
 }
