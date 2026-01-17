@@ -45,12 +45,12 @@ export default function PostForm({
       ? "Creating..."
       : "Create Post"
     : isSubmitting
-    ? "Updating..."
-    : "Update Post";
+      ? "Updating..."
+      : "Update Post";
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-0">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-6">{title}</h1>
+    <>
+      <h1 className="text-2xl font-bold mb-6">{title}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
           <label
@@ -61,7 +61,7 @@ export default function PostForm({
           </label>
           <Input
             id="title"
-            placeholder="Enter an engaging title..."
+            placeholder="Enter post title..."
             disabled={isSubmitting}
             error={!!errors.title}
             aria-describedby={errors.title ? "title-error" : undefined}
@@ -99,7 +99,7 @@ export default function PostForm({
             rows={8}
             id="body"
             disabled={isSubmitting}
-            placeholder="Write your post content here... (minimum 10 characters)"
+            placeholder="Write your post content here..."
             className={`w-full px-4 py-3 border rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-colors ${
               errors.body
                 ? "border-red-500"
@@ -148,15 +148,14 @@ export default function PostForm({
         )}
 
         <div className="flex flex-col sm:flex-row gap-3 justify-end pt-4">
-          <button
+          <Button
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="px-4 sm:px-6 py-2 sm:py-3 text-gray-300 border border-white/20 hover:border-white/40 hover:text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium order-2 sm:order-1"
-            aria-label="Cancel and go back"
+            className="px-6 py-3 bg-transparent hover:bg-transparent border border-white/20 hover:border-white/40"
           >
             Cancel
-          </button>
+          </Button>
           <Button
             type="submit"
             disabled={isSubmitting}
@@ -166,6 +165,6 @@ export default function PostForm({
           </Button>
         </div>
       </form>
-    </div>
+    </>
   );
 }

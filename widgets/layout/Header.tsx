@@ -4,16 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/shared/lib/auth-context";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-
-type NavLink = {
-  label: string;
-  href: string;
-};
-
-const LINKS: NavLink[] = [
-  { label: "Home", href: "/" },
-  { label: "Posts", href: "/posts" },
-];
+import { LINKS } from "../constants/navigation";
 
 export default function Header() {
   const pathname = usePathname();
@@ -38,11 +29,12 @@ export default function Header() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`px-3 py-2 rounded-md transition-all ${
-                    isActive
-                      ? "bg-blue-600/20 text-blue-400 border border-blue-600/50"
-                      : "text-gray-300 hover:text-white hover:bg-gray-800"
-                  }`}
+                  className={`px-3 py-2 rounded-md transition-all 
+                    ${
+                      isActive
+                        ? "bg-blue-600/20 text-blue-400"
+                        : "text-gray-300 hover:text-white hover:bg-gray-800"
+                    }`}
                   aria-current={isActive ? "page" : undefined}
                 >
                   {label}
@@ -50,18 +42,6 @@ export default function Header() {
               </li>
             );
           })}
-
-          {user && (
-            <li>
-              <Link
-                href="/create"
-                className="px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white font-medium transition-colors text-sm"
-                aria-label="Create new post"
-              >
-                Create Post
-              </Link>
-            </li>
-          )}
         </ul>
 
         <div className="flex items-center gap-3 sm:gap-4">

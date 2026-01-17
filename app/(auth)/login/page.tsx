@@ -56,17 +56,6 @@ export default function LoginPage() {
         </div>
 
         <div className="border border-white/10 rounded-xl p-6 sm:p-8 bg-gray-800/30 backdrop-blur-sm">
-          {errors.root && (
-            <div
-              className="mb-6 p-4 rounded-lg bg-red-900/20 border border-red-800/50 flex gap-3"
-              role="alert"
-              aria-live="polite"
-            >
-              <RiAlertLine className="flex-shrink-0 w-5 h-5 text-red-500 mt-0.5" />
-              <p className="text-red-400 text-sm">{errors.root.message}</p>
-            </div>
-          )}
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <Input
@@ -74,7 +63,6 @@ export default function LoginPage() {
                 type="email"
                 placeholder="your@email.com"
                 disabled={isSubmitting}
-                aria-describedby={errors.email ? "email-error" : undefined}
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -100,9 +88,6 @@ export default function LoginPage() {
                 type="password"
                 placeholder="Enter your password"
                 disabled={isSubmitting}
-                aria-describedby={
-                  errors.password ? "password-error" : undefined
-                }
                 {...register("password", {
                   required: "Password is required",
                   minLength: {

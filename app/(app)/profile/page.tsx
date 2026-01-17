@@ -17,7 +17,7 @@ export default function ProfilePage() {
     <div className="mt-4 space-y-3">
       <h2 className="text-xl font-bold">Profile</h2>
 
-      <div className="border border-white/50 p-4 rounded-md">
+      <div className="p-4 rounded-md border border-white/20 hover:border-white/40">
         <p>
           <strong>ID:</strong> {user?.id}
         </p>

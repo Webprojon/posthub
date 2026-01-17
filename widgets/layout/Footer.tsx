@@ -1,14 +1,12 @@
 import Link from "next/link";
-import { RiGithubLine, RiLinkedinLine, RiTwitterXLine } from "react-icons/ri";
+import { LINKS, NETWORK_LINKS } from "../constants/navigation";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-
   return (
     <footer className="border-t border-white/10 bg-gray-900/50 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 mb-8">
-          {/* Brand */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
               PostHub
@@ -19,73 +17,46 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Links */}
           <div className="space-y-4">
             <h4 className="font-semibold text-white">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/posts"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Posts
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/create"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Create Post
-                </Link>
-              </li>
+              {LINKS.map(({ label, href }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Social */}
           <div className="space-y-4">
             <h4 className="font-semibold text-white">Follow Us</h4>
             <div className="flex gap-4">
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-              >
-                <RiGithubLine className="w-5 h-5" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-              >
-                <RiLinkedinLine className="w-5 h-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-              >
-                <RiTwitterXLine className="w-5 h-5" />
-              </a>
+              <div className="flex gap-4">
+                {NETWORK_LINKS.map(({ label, href, icon }) => {
+                  const IconComponent = icon;
+                  return (
+                    <a
+                      key={href}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      <IconComponent size={20} />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-400">
             <p>© {currentYear} PostHub. All rights reserved.</p>

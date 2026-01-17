@@ -33,7 +33,7 @@ export default function PostsPage() {
   };
 
   return (
-    <div className="mt-4 space-y-4 px-4 sm:px-0">
+    <div className="mt-4 space-y-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">Posts</h1>
         {isAuthenticated && (
@@ -61,7 +61,7 @@ export default function PostsPage() {
           {posts.map((post) => (
             <li
               key={post.id}
-              className="rounded-md border border-white/20 p-4 sm:p-6 hover:border-white/40 transition-colors"
+              className="rounded-md p-4 sm:p-6 border border-white/20 hover:border-white/40 transition-colors"
             >
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                 <div className="flex-1 min-w-0">
@@ -89,8 +89,7 @@ export default function PostsPage() {
                     <button
                       onClick={() => router.push(`/edit/${post.id}`)}
                       disabled={deletePost.isPending}
-                      className="p-2 border border-white/20 rounded-md hover:border-blue-500 hover:text-blue-500 hover:bg-blue-600/10 transition-colors disabled:opacity-50"
-                      aria-label={`Edit post: ${post.title}`}
+                      className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-blue-500 hover:text-blue-500 hover:bg-blue-600/10 transition-colors disabled:opacity-50"
                       title="Edit post"
                     >
                       <RiEdit2Line className="w-5 h-5" />
@@ -98,8 +97,7 @@ export default function PostsPage() {
                     <button
                       onClick={() => handleDelete(post.id)}
                       disabled={deletePost.isPending}
-                      className="p-2 border border-white/20 rounded-md hover:border-red-500 hover:text-red-500 hover:bg-red-600/10 transition-colors disabled:opacity-50"
-                      aria-label={`Delete post: ${post.title}`}
+                      className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-red-500 hover:text-red-500 hover:bg-red-600/10 transition-colors disabled:opacity-50"
                       title="Delete post"
                     >
                       <RiDeleteBin5Line className="w-5 h-5" />

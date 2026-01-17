@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@/test/utils/test-utils";
-import PostsPage from "@/app/posts/page";
+import PostsPage from "./page";
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -33,9 +33,9 @@ describe("PostsPage", () => {
             success: false,
             error: { message: "Server error", status: 500 },
           },
-          { status: 500 }
-        )
-      )
+          { status: 500 },
+        ),
+      ),
     );
 
     render(<PostsPage />);

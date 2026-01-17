@@ -10,8 +10,6 @@ import PostForm, { PostFormData } from "@/shared/ui/post-form";
 import QueryState from "@/shared/ui/query-state";
 import { use } from "react";
 import toast from "react-hot-toast";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import Link from "next/link";
 
 type EditPageProps = {
   params: Promise<{
@@ -65,11 +63,6 @@ export default function EditPage({ params }: EditPageProps) {
 
   return (
     <div className="mt-4">
-      <Link href={`/posts/${postId}`} className="flex items-center gap-2 mb-4">
-        <MdKeyboardArrowLeft className="size-6" />
-        Back to post
-      </Link>
-
       <QueryState
         isLoading={isLoadingPost}
         isError={Boolean(postError)}

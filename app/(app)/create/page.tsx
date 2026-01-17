@@ -30,7 +30,7 @@ export default function CreatePage() {
       router.push("/posts");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to create post"
+        error instanceof Error ? error.message : "Failed to create post",
       );
     }
   };
