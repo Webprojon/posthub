@@ -3,23 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/shared/lib/auth-context";
-import { RiLogoutBoxRLine, RiLoginBoxLine } from "react-icons/ri";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 
-const LINKS = [
-  { label: "Home", href: "/", mobile: true },
-  { label: "Posts", href: "/posts", mobile: true },
+type NavLink = {
+  label: string;
+  href: string;
+};
+
+const LINKS: NavLink[] = [
+  { label: "Home", href: "/" },
+  { label: "Posts", href: "/posts" },
 ];
 
 export default function Header() {
   const pathname = usePathname();
-  const { isAuthenticated, user, logout } = useAuth();
-
-  // Hide header on login/auth pages
-  const isAuthPage = pathname.startsWith("/login") || pathname === "/auth";
-
-  if (isAuthPage) {
-    return null;
-  }
+  const { user, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-gray-900/80 backdrop-blur-sm">
@@ -53,7 +51,7 @@ export default function Header() {
             );
           })}
 
-          {isAuthenticated && (
+          {user && (
             <li>
               <Link
                 href="/create"
@@ -67,7 +65,7 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center gap-3 sm:gap-4">
-          {isAuthenticated && user && (
+          {user && (
             <div className="flex items-center gap-3">
               <Link
                 href="/profile"
@@ -79,7 +77,7 @@ export default function Header() {
               </Link>
               <button
                 onClick={logout}
-                className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors hidden sm:block"
+                className="p-2 cursor-pointer text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors hidden sm:block"
                 aria-label="Logout"
                 title="Logout"
               >
@@ -87,22 +85,10 @@ export default function Header() {
               </button>
             </div>
           )}
-
-          {!isAuthenticated && (
-            <Link
-              href="/login"
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white font-medium transition-colors text-sm"
-              aria-label="Login to your account"
-            >
-              <RiLoginBoxLine className="w-4 h-4" />
-              <span className="hidden sm:inline">Login</span>
-            </Link>
-          )}
         </div>
       </nav>
 
-      {/* Mobile quick links */}
-      {isAuthenticated && (
+      {user && (
         <div className="sm:hidden border-t border-white/10 bg-gray-900/50">
           <div className="flex items-center justify-between px-4 py-3">
             <Link

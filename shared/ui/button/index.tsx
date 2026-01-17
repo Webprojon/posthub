@@ -13,7 +13,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    "font-semibold transition-all duration-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2";
+    "cursor-pointer font-semibold transition-all duration-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2";
 
   const variantStyles = {
     primary:

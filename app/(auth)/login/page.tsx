@@ -14,27 +14,24 @@ type LoginFormData = {
 };
 
 export default function LoginPage() {
-  const { isAuthenticated, login, isLoading } = useAuth();
+  const { user, login, isLoading } = useAuth();
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-  } = useForm<LoginFormData>({
-    defaultValues: { email: "", password: "" },
-  });
+  } = useForm<LoginFormData>();
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading) {
-      router.push("/");
+    if (!isLoading && user) {
+      router.replace("/");
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [user, isLoading, router]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
       await login(data.email, data.password);
-      router.push("/");
     } catch (err) {
       setError("root", {
         message: err instanceof Error ? err.message : "Login failed",
@@ -45,7 +42,7 @@ export default function LoginPage() {
   if (isLoading) {
     return (
       <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4">
-        <p className="text-lg text-gray-400">Loading...</p>
+        <p className="text-xl text-gray-200">Loading...</p>
       </div>
     );
   }
@@ -126,10 +123,10 @@ export default function LoginPage() {
             </div>
 
             <Button
-              type="submit"
-              className="w-full py-3 text-base font-semibold"
-              disabled={isSubmitting}
               size="lg"
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3 text-base font-semibold"
             >
               {isSubmitting ? "Signing in..." : "Sign In"}
             </Button>

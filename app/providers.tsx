@@ -15,7 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             retry: 1,
           },
         },
-      }),
+      })
   );
 
   return (
@@ -24,4 +24,3 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     </QueryClientProvider>
   );
 }
-
