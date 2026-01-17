@@ -9,31 +9,40 @@ import toast from "react-hot-toast";
 
 export default function CreatePage() {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuth();
+  const { user, isLoading } = useAuth();
   const createPost = useCreatePost();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/login");
+    if (!isLoading && !user) {
+      router.replace("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [user, isLoading, router]);
 
   const handleSubmit = async (data: PostFormData) => {
     try {
       await createPost.mutateAsync({
         title: data.title,
         body: data.body,
-        author: user?.name || "Anonymous",
+        author: user!.name,
       });
+
       router.push("/posts");
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to create post";
-      toast.error(message);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create post"
+      );
     }
   };
 
-  if (!isAuthenticated) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!user) {
     return null;
   }
 
