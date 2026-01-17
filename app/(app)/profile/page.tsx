@@ -3,6 +3,7 @@
 import { useAuth } from "@/shared/lib/auth-context";
 import { useRouter } from "next/navigation";
 import Button from "@/shared/ui/button";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
@@ -28,7 +29,10 @@ export default function ProfilePage() {
           <strong>Email:</strong> {user?.email}
         </p>
       </div>
-      <Button onClick={handleLogout}>Logout</Button>
+      <Button onClick={handleLogout} className="flex items-center gap-2">
+        <RiLogoutBoxRLine className="w-4 h-4" />
+        Logout
+      </Button>
     </div>
   );
 }
