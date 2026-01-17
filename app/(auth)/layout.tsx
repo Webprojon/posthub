@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Login - Next.js 5 Days Challenge",
+  title: "Login - Posthub",
   description: "Sign in to your account",
 };
 
