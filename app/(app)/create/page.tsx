@@ -19,13 +19,14 @@ export default function CreatePage() {
   }, [user, isLoading, router]);
 
   const handleSubmit = async (data: PostFormData) => {
+    if (!user) return;
+
     try {
       await createPost.mutateAsync({
         title: data.title,
         body: data.body,
-        author: user!.name,
+        author: user.name,
       });
-
       router.push("/posts");
     } catch (error) {
       toast.error(
