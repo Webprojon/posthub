@@ -4,7 +4,7 @@ import { RiArrowRightLine } from "react-icons/ri";
 
 export default function Home() {
   return (
-    <div className="min-h-[calc(100vh-160px)] flex flex-col justify-center items-center px-4 sm:px-0">
+    <div className="min-h-[calc(100vh-131px)] flex flex-col justify-center items-center px-4 sm:px-0">
       <div className="text-center max-w-2xl mx-auto space-y-6 sm:space-y-8">
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">

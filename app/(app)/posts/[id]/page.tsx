@@ -28,7 +28,7 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
   });
 
   return (
-    <article className="space-y-6">
+    <article className="mt-2 space-y-6 min-h-[calc(100vh-131px)]">
       <QueryState
         isLoading={isPending}
         isError={Boolean(error)}

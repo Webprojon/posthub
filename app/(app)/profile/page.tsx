@@ -8,7 +8,7 @@ export default function ProfilePage() {
   const { user, logout } = useAuth();
 
   return (
-    <div className="mt-4 space-y-3">
+    <div className="min-h-[calc(100vh-131px)] mt-4 space-y-3">
       <h2 className="text-xl font-bold">Profile</h2>
 
       <div className="p-4 rounded-md border border-white/20 hover:border-white/40">
