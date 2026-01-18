@@ -49,7 +49,7 @@ export default function PostForm({
       : "Update Post";
 
   return (
-    <>
+    <div className="min-h-[calc(100vh-131px)]">
       <h1 className="text-2xl font-bold mb-6">{title}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
@@ -165,6 +165,6 @@ export default function PostForm({
           </Button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
