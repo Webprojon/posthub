@@ -50,7 +50,7 @@ export async function createPost(data: {
 
 export async function updatePost(
   postId: number,
-  data: { title?: string; body?: string }
+  data: { title?: string; body?: string },
 ) {
   const res = await fetch(`/api/posts/${postId}`, {
     method: "PATCH",

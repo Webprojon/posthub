@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import Button from "@/shared/ui/button";
 import Input from "@/shared/ui/input";
 import { RiAlertLine } from "react-icons/ri";
+import Loader from "@/shared/ui/loader";
 
 type LoginFormData = {
   email: string;
@@ -39,13 +40,7 @@ export default function LoginPage() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4">
-        <p className="text-xl text-gray-200">Loading...</p>
-      </div>
-    );
-  }
+  if (isLoading) return <Loader className="min-h-[calc(100vh-80px)]" />;
 
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-8">

@@ -1,9 +1,6 @@
+import { FEATURES, TECHS } from "@/widgets/constants/home-data";
 import Link from "next/link";
-import {
-  RiArrowRightLine,
-  RiShieldCheckLine,
-  RiRocket2Line,
-} from "react-icons/ri";
+import { RiArrowRightLine } from "react-icons/ri";
 
 export default function Home() {
   return (
@@ -23,21 +20,16 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-8">
-          <div className="p-4 rounded-lg border border-white/10 bg-gray-800/50 hover:bg-gray-800 transition-colors">
-            <RiRocket2Line className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-            <h3 className="font-semibold mb-1">Fast & Responsive</h3>
-            <p className="text-sm text-gray-400">Optimized for all devices</p>
-          </div>
-          <div className="p-4 rounded-lg border border-white/10 bg-gray-800/50 hover:bg-gray-800 transition-colors">
-            <RiShieldCheckLine className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-            <h3 className="font-semibold mb-1">Secure Auth</h3>
-            <p className="text-sm text-gray-400">Protected with auth guards</p>
-          </div>
-          <div className="p-4 rounded-lg border border-white/10 bg-gray-800/50 hover:bg-gray-800 transition-colors">
-            <RiArrowRightLine className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-            <h3 className="font-semibold mb-1">Easy to Use</h3>
-            <p className="text-sm text-gray-400">Intuitive interface</p>
-          </div>
+          {FEATURES.map(({ title, description, icon: Icon }) => (
+            <div
+              key={title}
+              className="p-4 rounded-lg border border-white/10 bg-gray-800/50 hover:bg-gray-800 transition-colors"
+            >
+              <Icon className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+              <h3 className="font-semibold mb-1">{title}</h3>
+              <p className="text-sm text-gray-400">{description}</p>
+            </div>
+          ))}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -49,7 +41,7 @@ export default function Home() {
             <RiArrowRightLine className="w-4 h-4" />
           </Link>
           <Link
-            href="/login"
+            href="/create"
             className="px-6 sm:px-8 py-3 border border-blue-600 text-blue-400 hover:bg-blue-600/10 rounded-lg font-semibold transition-colors"
           >
             Get Started
@@ -61,13 +53,7 @@ export default function Home() {
             Built with modern technologies:
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {[
-              "Next.js 16",
-              "React 19",
-              "TailwindCSS",
-              "React Query",
-              "TypeScript",
-            ].map((tech) => (
+            {TECHS.map((tech) => (
               <span
                 key={tech}
                 className="px-3 py-1 bg-gray-800 border border-white/10 rounded-full text-xs font-medium text-gray-300"

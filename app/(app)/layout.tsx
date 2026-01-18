@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Header from "@/widgets/layout/Header";
 import Footer from "@/widgets/layout/Footer";
 import { useAuth } from "@/shared/lib/auth-context";
+import Loader from "@/shared/ui/loader";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -17,13 +18,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-gray-200">Loading...</p>
-      </div>
-    );
-  }
+  if (isLoading) return <Loader className="min-h-screen" />;
 
   if (!user) return null;
 

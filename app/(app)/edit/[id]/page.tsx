@@ -57,10 +57,6 @@ export default function EditPage({ params }: EditPageProps) {
     }
   };
 
-  if (!isAuthenticated) {
-    return null;
-  }
-
   return (
     <div className="mt-4">
       <QueryState

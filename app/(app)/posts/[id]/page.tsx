@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPost } from "@/shared/lib/posts-api";
 import QueryState from "@/shared/ui/query-state";
 import { use } from "react";
-import { MdKeyboardArrowLeft } from "react-icons/md";
+import { formatDate } from "@/shared/lib/format-date";
 
 type PostDetailPageProps = {
   params: Promise<{
@@ -29,7 +28,7 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
   });
 
   return (
-    <article className="mt-4 space-y-6 px-4 sm:px-0 max-w-2xl mx-auto">
+    <article className="space-y-6">
       <QueryState
         isLoading={isPending}
         isError={Boolean(error)}
@@ -40,28 +39,13 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
 
       {post && (
         <>
-          <Link
-            href="/posts"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-medium text-sm"
-            aria-label="Go back to posts list"
-          >
-            <MdKeyboardArrowLeft className="w-5 h-5" />
-            Back to posts
-          </Link>
-
           <header className="space-y-3 border-b border-white/10 pb-6">
             <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
               {post.title}
             </h1>
             <p className="text-sm text-gray-400">
               <span className="font-medium text-white">By {post.author}</span> •
-              {new Date(post.createdAt).toLocaleDateString(undefined, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {formatDate(post.createdAt)}
             </p>
           </header>
 

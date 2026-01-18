@@ -6,12 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "@/shared/lib/posts-api";
 import { useDeletePost } from "@/shared/lib/post-mutations";
 import QueryState from "@/shared/ui/query-state";
-import { useAuth } from "@/shared/lib/auth-context";
 import { RiDeleteBin5Line, RiEdit2Line, RiFileAddLine } from "react-icons/ri";
+import { formatDate } from "@/shared/lib/format-date";
 
 export default function PostsPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
   const {
     data: posts,
     isLoading,
@@ -36,16 +35,14 @@ export default function PostsPage() {
     <div className="mt-4 space-y-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">Posts</h1>
-        {isAuthenticated && (
-          <Link
-            href="/create"
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 transition-colors rounded-md font-medium text-white text-sm sm:text-base"
-            aria-label="Create new post"
-          >
-            <RiFileAddLine className="w-4 h-4" />
-            <span className="hidden sm:inline">New Post</span>
-          </Link>
-        )}
+        <Link
+          href="/create"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 transition-colors rounded-md font-medium text-white text-sm sm:text-base"
+          aria-label="Create new post"
+        >
+          <RiFileAddLine className="w-4 h-4" />
+          <span className="hidden sm:inline">New Post</span>
+        </Link>
       </div>
 
       <QueryState
@@ -73,37 +70,31 @@ export default function PostsPage() {
                   </Link>
                   <p className="text-xs sm:text-sm text-gray-400 mt-1">
                     by <span className="font-medium">{post.author}</span> •{" "}
-                    {new Date(post.createdAt).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
+                    {formatDate(post.createdAt)}
                   </p>
                   <p className="mt-2 text-sm text-gray-300 line-clamp-2">
                     {post.body}
                   </p>
                 </div>
 
-                {isAuthenticated && (
-                  <div className="flex gap-2 flex-shrink-0">
-                    <button
-                      onClick={() => router.push(`/edit/${post.id}`)}
-                      disabled={deletePost.isPending}
-                      className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-blue-500 hover:text-blue-500 hover:bg-blue-600/10 transition-colors disabled:opacity-50"
-                      title="Edit post"
-                    >
-                      <RiEdit2Line className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(post.id)}
-                      disabled={deletePost.isPending}
-                      className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-red-500 hover:text-red-500 hover:bg-red-600/10 transition-colors disabled:opacity-50"
-                      title="Delete post"
-                    >
-                      <RiDeleteBin5Line className="w-5 h-5" />
-                    </button>
-                  </div>
-                )}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => router.push(`/edit/${post.id}`)}
+                    disabled={deletePost.isPending}
+                    className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-blue-500 hover:text-blue-500 hover:bg-blue-600/10 transition-colors disabled:opacity-50"
+                    title="Edit post"
+                  >
+                    <RiEdit2Line className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(post.id)}
+                    disabled={deletePost.isPending}
+                    className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-red-500 hover:text-red-500 hover:bg-red-600/10 transition-colors disabled:opacity-50"
+                    title="Delete post"
+                  >
+                    <RiDeleteBin5Line className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </li>
           ))}
@@ -118,15 +109,13 @@ export default function PostsPage() {
             Get started by creating your first post to share your thoughts with
             the world.
           </p>
-          {isAuthenticated && (
-            <Link
-              href="/create"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 transition-colors rounded-md font-medium text-white"
-            >
-              <RiFileAddLine className="w-4 h-4" />
-              Create First Post
-            </Link>
-          )}
+          <Link
+            href="/create"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 transition-colors rounded-md font-medium text-white"
+          >
+            <RiFileAddLine className="w-4 h-4" />
+            Create First Post
+          </Link>
         </div>
       )}
     </div>
