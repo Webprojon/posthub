@@ -37,4 +37,3 @@ export function errorResponse(message: string, status = 500) {
     { status },
   );
 }
-
