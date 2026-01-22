@@ -15,7 +15,7 @@ type PostFormProps = {
   isSubmitting: boolean;
   error?: Error | null;
   initialValues?: PostFormData;
-  onSubmit: (data: PostFormData) => Promise<void>;
+  onSubmit: (data: PostFormData) => void;
   onCancel: () => void;
 };
 

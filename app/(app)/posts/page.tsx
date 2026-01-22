@@ -2,34 +2,16 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { fetchPosts } from "@/shared/lib/posts-api";
-import { useDeletePost } from "@/shared/lib/post-mutations";
 import QueryState from "@/shared/ui/query-state";
 import { RiDeleteBin5Line, RiEdit2Line, RiFileAddLine } from "react-icons/ri";
 import { formatDate } from "@/shared/lib/format-date";
+import { usePosts } from "@/entities/post/model/post.queries";
+import { useDeletePostFeature } from "@/features/post/delete-post/model";
 
 export default function PostsPage() {
   const router = useRouter();
-  const {
-    data: posts,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["posts"],
-    queryFn: fetchPosts,
-  });
-
-  const deletePost = useDeletePost();
-
-  const handleDelete = async (postId: number) => {
-    try {
-      await deletePost.mutateAsync(postId);
-    } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to delete post");
-    }
-  };
+  const { data: posts, isLoading, error, refetch } = usePosts();
+  const { deletePost, isDeleting } = useDeletePostFeature();
 
   return (
     <div className="min-h-[calc(100vh-135px)] mt-4 space-y-4">
@@ -80,17 +62,15 @@ export default function PostsPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => router.push(`/edit/${post.id}`)}
-                    disabled={deletePost.isPending}
-                    className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-blue-500 hover:text-blue-500 hover:bg-blue-600/10 transition-colors disabled:opacity-50"
-                    title="Edit post"
+                    disabled={isDeleting}
+                    className="p-2 border cursor-pointer border-white/20 rounded-md hover:border-blue-500 hover:text-blue-500"
                   >
                     <RiEdit2Line className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={() => handleDelete(post.id)}
-                    disabled={deletePost.isPending}
-                    className="cursor-pointer p-2 border border-white/20 rounded-md hover:border-red-500 hover:text-red-500 hover:bg-red-600/10 transition-colors disabled:opacity-50"
-                    title="Delete post"
+                    onClick={() => deletePost(post.id)}
+                    disabled={isDeleting}
+                    className="p-2 border cursor-pointer border-white/20 rounded-md hover:border-red-500 hover:text-red-500"
                   >
                     <RiDeleteBin5Line className="w-5 h-5" />
                   </button>

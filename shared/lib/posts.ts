@@ -49,7 +49,7 @@ export function createPost(title: string, body: string, author: string): Post {
 export function updatePost(
   id: number,
   title: string,
-  body: string
+  body: string,
 ): Post | null {
   const post = findPostById(id);
   if (!post) return null;

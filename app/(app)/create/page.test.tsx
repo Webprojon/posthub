@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@/test/utils/test-utils";
 import userEvent from "@testing-library/user-event";
-import CreatePage from "@/app/create/page";
+import CreatePage from "./page";
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({

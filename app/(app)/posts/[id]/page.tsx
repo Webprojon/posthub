@@ -1,10 +1,9 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { fetchPost } from "@/shared/lib/posts-api";
 import QueryState from "@/shared/ui/query-state";
 import { use } from "react";
 import { formatDate } from "@/shared/lib/format-date";
+import { usePost } from "@/entities/post/model/post.queries";
 
 type PostDetailPageProps = {
   params: Promise<{
@@ -14,18 +13,7 @@ type PostDetailPageProps = {
 
 export default function PostDetailPage({ params }: PostDetailPageProps) {
   const { id } = use(params);
-  const postId = id;
-
-  const {
-    data: post,
-    isPending,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["posts", postId],
-    queryFn: () => fetchPost(postId),
-    enabled: Boolean(postId),
-  });
+  const { data: post, isPending, error, refetch } = usePost(id);
 
   return (
     <article className="mt-2 space-y-6 min-h-[calc(100vh-131px)]">
@@ -44,7 +32,7 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
               {post.title}
             </h1>
             <p className="text-sm text-gray-400">
-              <span className="font-medium text-white">By {post.author}</span> •
+              <span className="font-medium text-white">By {post.author}</span> •{" "}
               {formatDate(post.createdAt)}
             </p>
           </header>
