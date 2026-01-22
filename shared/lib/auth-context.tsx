@@ -41,8 +41,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
 
     try {
-      await new Promise((r) => setTimeout(r, 500));
-
       if (!email || !password) {
         throw new Error("Email and password are required");
       }

@@ -1,5 +1,9 @@
+import {
+  deletePost,
+  findPostById,
+  updatePost,
+} from "@/entities/post/model/repository";
 import { errorResponse, successResponse } from "@/shared/lib/api-response";
-import { findPostById, updatePost, deletePost } from "@/shared/lib/posts";
 
 type RouteContext = {
   params: Promise<{
@@ -7,75 +11,58 @@ type RouteContext = {
   }>;
 };
 
-export async function GET(_request: Request, { params }: RouteContext) {
+export async function GET(_req: Request, { params }: RouteContext) {
   const { id } = await params;
   const postId = Number(id);
-  const post = findPostById(postId);
 
+  if (Number.isNaN(postId)) {
+    return errorResponse("Invalid post id", 400);
+  }
+
+  const post = findPostById(postId);
+  return post ? successResponse(post) : errorResponse("Post not found", 404);
+}
+
+export async function PUT(request: Request, { params }: RouteContext) {
+  try {
+    const { id } = await params;
+    const postId = Number(id);
+    const post = findPostById(postId);
+
+    if (!post) {
+      return errorResponse("Post not found", 404);
+    }
+
+    const { title, body } = await request.json();
+
+    if (!title || !body) {
+      return errorResponse("title and body are required", 400);
+    }
+
+    const updated = updatePost(postId, title.trim(), body.trim());
+
+    return updated
+      ? successResponse(updated)
+      : errorResponse("Failed to update post", 500);
+  } catch {
+    return errorResponse("Invalid JSON body", 400);
+  }
+}
+
+export async function DELETE(_req: Request, { params }: RouteContext) {
+  const { id } = await params;
+  const postId = Number(id);
+
+  if (Number.isNaN(postId)) {
+    return errorResponse("Invalid post id", 400);
+  }
+
+  const post = findPostById(postId);
   if (!post) {
     return errorResponse("Post not found", 404);
   }
 
-  return successResponse(post);
-}
-
-export async function PATCH(request: Request, { params }: RouteContext) {
-  try {
-    const { id } = await params;
-    const postId = Number(id);
-    const post = findPostById(postId);
-
-    if (!post) {
-      return errorResponse("Post not found", 404);
-    }
-
-    const body = await request.json();
-    const { title, body: bodyText } = body;
-
-    if (title !== undefined && title.trim().length === 0) {
-      return errorResponse("Title cannot be empty", 400);
-    }
-
-    if (bodyText !== undefined && bodyText.trim().length === 0) {
-      return errorResponse("Body cannot be empty", 400);
-    }
-
-    const updated = updatePost(
-      postId,
-      title !== undefined ? title : post.title,
-      bodyText !== undefined ? bodyText : post.body
-    );
-
-    if (!updated) {
-      return errorResponse("Failed to update post", 500);
-    }
-
-    return successResponse(updated);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Invalid request";
-    return errorResponse(message, 400);
-  }
-}
-
-export async function DELETE(_request: Request, { params }: RouteContext) {
-  try {
-    const { id } = await params;
-    const postId = Number(id);
-    const post = findPostById(postId);
-
-    if (!post) {
-      return errorResponse("Post not found", 404);
-    }
-
-    const success = deletePost(postId);
-
-    if (!success) {
-      return errorResponse("Failed to delete post", 500);
-    }
-
-    return successResponse({ id: postId, deleted: true });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Invalid request";
-    return errorResponse(message, 400);
-  }
+  return deletePost(postId)
+    ? successResponse({ id: postId, deleted: true })
+    : errorResponse("Failed to delete post", 500);
 }

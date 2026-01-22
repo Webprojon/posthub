@@ -1,31 +1,28 @@
-import { POSTS, createPost } from "@/shared/lib/posts";
+import { createPost, posts } from "@/entities/post/model/repository";
 import { successResponse, errorResponse } from "@/shared/lib/api-response";
 
 export async function GET() {
-  return successResponse(POSTS);
+  return successResponse(posts);
 }
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { title, body: bodyText, author } = body;
+    const { title, body, author } = await request.json();
 
-    if (!title || !bodyText || !author) {
-      return errorResponse(
-        "Missing required fields: title, body, author",
-        400
-      );
+    if (!title || !body || !author) {
+      return errorResponse("title, body and author are required", 400);
     }
 
-    if (title.trim().length === 0 || bodyText.trim().length === 0) {
-      return errorResponse("Title and body cannot be empty", 400);
+    const trimmedTitle = title.trim();
+    const trimmedBody = body.trim();
+
+    if (!trimmedTitle || !trimmedBody) {
+      return errorResponse("title and body cannot be empty", 400);
     }
 
-    const newPost = createPost(title, bodyText, author);
-    return successResponse(newPost, 201);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Invalid request";
-    return errorResponse(message, 400);
+    const post = createPost(trimmedTitle, trimmedBody, author);
+    return successResponse(post, 201);
+  } catch {
+    return errorResponse("Invalid JSON body", 400);
   }
 }
-

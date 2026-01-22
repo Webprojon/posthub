@@ -11,7 +11,7 @@ export const createResourceApi = <Entity, CreateDto, UpdateDto>(
     create: (data: CreateDto) => api.post<Entity>(endpoint, data),
 
     update: (id: number | string, data: UpdateDto) =>
-      api.patch<Entity>(`${endpoint}/${id}`, data),
+      api.put<Entity>(`${endpoint}/${id}`, data),
 
     remove: (id: number | string) => api.delete<void>(`${endpoint}/${id}`),
   };
