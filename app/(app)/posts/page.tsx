@@ -6,12 +6,12 @@ import QueryState from "@/shared/ui/query-state";
 import { RiDeleteBin5Line, RiEdit2Line, RiFileAddLine } from "react-icons/ri";
 import { formatDate } from "@/shared/lib/format-date";
 import { usePosts } from "@/entities/post/model/post.queries";
-import { useDeletePostFeature } from "@/features/post/delete-post/model";
+import { useDeletePostFeature } from "@/features/post/delete/model/useDeletePost";
 
 export default function PostsPage() {
   const router = useRouter();
   const { data: posts, isLoading, error, refetch } = usePosts();
-  const { deletePost, isDeleting } = useDeletePostFeature();
+  const { submit, isLoading: isDeleting } = useDeletePostFeature();
 
   return (
     <div className="min-h-[calc(100vh-135px)] mt-4 space-y-4">
@@ -68,7 +68,7 @@ export default function PostsPage() {
                     <RiEdit2Line className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={() => deletePost(post.id)}
+                    onClick={() => submit(post.id)}
                     disabled={isDeleting}
                     className="p-2 border cursor-pointer border-white/20 rounded-md hover:border-red-500 hover:text-red-500"
                   >

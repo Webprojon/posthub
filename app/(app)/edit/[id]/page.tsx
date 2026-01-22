@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import PostForm, { PostFormData } from "@/shared/ui/post-form";
 import QueryState from "@/shared/ui/query-state";
 import { use } from "react";
 import { usePost } from "@/entities/post/model/post.queries";
-import { useUpdatePostFeature } from "@/features/post/update-post/model";
+import { useUpdatePostFeature } from "@/features/post/update/model/useUpdatePost";
+import PostForm from "@/features/post/form/ul/PostForm";
+import { PostFormData } from "@/features/post/form/model/types";
 
 type EditPageProps = {
   params: Promise<{
@@ -22,7 +23,7 @@ export default function EditPage({ params }: EditPageProps) {
     isPending: isLoadingPost,
     error: postError,
   } = usePost(id);
-  const { updatePost, isLoading } = useUpdatePostFeature(id);
+  const { submit, isLoading } = useUpdatePostFeature(id);
 
   return (
     <div className="mt-4">
@@ -43,7 +44,7 @@ export default function EditPage({ params }: EditPageProps) {
             body: post.body,
           }}
           onSubmit={(data: PostFormData) =>
-            updatePost({
+            submit({
               title: data.title,
               body: data.body,
             })

@@ -1,13 +1,16 @@
 import { useDeletePost } from "@/entities/post/model/post.queries";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export const useDeletePostFeature = () => {
+  const router = useRouter();
   const mutation = useDeletePost();
 
-  const deletePost = (id: number) => {
+  const submit = (id: number) => {
     mutation.mutate(id, {
       onSuccess: () => {
-        toast.success("Post deleted successfully");
+        toast.success("Post deleted");
+        router.push("/posts");
       },
       onError: (error) => {
         toast.error((error as Error).message);
@@ -16,7 +19,7 @@ export const useDeletePostFeature = () => {
   };
 
   return {
-    deletePost,
-    isDeleting: mutation.isPending,
+    submit,
+    isLoading: mutation.isPending,
   };
 };

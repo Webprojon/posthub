@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import PostForm, { PostFormData } from "@/shared/ui/post-form";
-import { useCreatePostFeature } from "@/features/post/create-post/model";
+import { useCreatePostFeature } from "@/features/post/create/model/useCreatePost";
+import { PostFormData } from "@/features/post/form/model/types";
+import PostForm from "@/features/post/form/ul/PostForm";
 
 export default function CreatePage() {
   const router = useRouter();
-  const { createPost, isLoading, error } = useCreatePostFeature();
+  const { submit, isLoading, error } = useCreatePostFeature();
 
   return (
     <PostForm
@@ -14,7 +15,7 @@ export default function CreatePage() {
       isSubmitting={isLoading}
       error={error}
       onSubmit={(data: PostFormData) =>
-        createPost({
+        submit({
           title: data.title,
           body: data.body,
         })

@@ -1,6 +1,7 @@
-import { useCreatePost } from "@/entities/post/model/post.queries";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+
+import { useCreatePost } from "@/entities/post/model/post.queries";
 import { useAuth } from "@/shared/lib/auth-context";
 import { CreatePostInput } from "@/entities/post/model/types";
 
@@ -10,7 +11,7 @@ export const useCreatePostFeature = () => {
 
   const mutation = useCreatePost();
 
-  const createPost = (values: Omit<CreatePostInput, "author">) => {
+  const submit = (values: Omit<CreatePostInput, "author">) => {
     mutation.mutate(
       {
         ...values,
@@ -18,7 +19,7 @@ export const useCreatePostFeature = () => {
       },
       {
         onSuccess: () => {
-          toast.success("Post created successfully!");
+          toast.success("Post created successfully");
           router.push("/posts");
         },
         onError: (error) => {
@@ -29,7 +30,7 @@ export const useCreatePostFeature = () => {
   };
 
   return {
-    createPost,
+    submit,
     isLoading: mutation.isPending,
     error: mutation.error,
   };

@@ -3,14 +3,14 @@ import { UpdatePostDto } from "@/entities/post/model/types";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-export const useUpdatePostFeature = (id?: number | string) => {
+export const useUpdatePostFeature = (id: string) => {
   const router = useRouter();
-  const mutation = useUpdatePost(id!);
+  const mutation = useUpdatePost(id);
 
-  const updatePost = (values: UpdatePostDto) => {
+  const submit = (values: UpdatePostDto) => {
     mutation.mutate(values, {
       onSuccess: () => {
-        toast.success("Post updated successfully!");
+        toast.success("Post updated!");
         router.push("/posts");
       },
       onError: (error) => {
@@ -20,7 +20,8 @@ export const useUpdatePostFeature = (id?: number | string) => {
   };
 
   return {
-    updatePost,
+    submit,
     isLoading: mutation.isPending,
+    error: mutation.error,
   };
 };
