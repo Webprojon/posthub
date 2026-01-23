@@ -20,8 +20,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (isLoading) return <Loader className="min-h-screen" />;
 
-  if (!user) return null;
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
       <Header />

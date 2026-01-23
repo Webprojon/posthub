@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const userData: User = {
-        id: "1",
+        id: Date.now().toString(),
         name: email.split("@")[0],
         email,
       };
